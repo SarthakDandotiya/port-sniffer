@@ -12,6 +12,7 @@ use std::process;
 use std::str::FromStr;
 use std::sync::mpsc::{channel, Sender};
 use std::thread;
+use std::time::Instant;
 
 const MAX: u16 = 65535;
 
@@ -86,6 +87,7 @@ fn scan(tx: Sender<u16>, start_port: u16, addr: IpAddr, num_threads: u16) {
 }
 
 fn main() {
+    let start = Instant::now();
     let args: Vec<String> = env::args().collect();
     let program = args[0].clone();
     let arguments = Arguments::new(&args).unwrap_or_else(|err| {
@@ -119,4 +121,6 @@ fn main() {
     for v in out {
         println!("{} is open", v);
     }
+    let duration = start.elapsed();
+    println!("Time elapsed is: {:?}", duration);
 }
